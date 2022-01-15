@@ -4,13 +4,18 @@ import { DataContext } from "../../context/data/dataContext"
 import "./Goods.css"
 
 export const Goods = () => {
-    const {goods, getGoods, loading} = useContext(DataContext)
+    const {goods, getGoods, filterGoods, products, sendData, loading} = useContext(DataContext)
 
     const params = useParams().id;
 
     const [value, setValue] = useState([])
-    console.log(value);
+    
+    let counterSum = 0
 
+    if (products !== undefined) {
+        products.forEach(product => counterSum += product.full)
+    }
+    
     let items = [...goods]
 
     if (params) {
@@ -20,6 +25,10 @@ export const Goods = () => {
     useEffect(() => {
         getGoods()
     }, [])
+
+    useEffect(() => {
+        filterGoods(items)
+    }, [value])
     
     const CustomComponent = item => {
         if (item) {
@@ -50,8 +59,8 @@ export const Goods = () => {
                                 min="0"  
                                 placeholder="Введите количество"
                                 onChange={e => {
-                                    setValue({value: e.target.value})
-                                    let nextValue = Object.assign({}, value, {value: e.target.value})
+                                    setValue({value: e.target.value, full: e.target.value * good.gprice})
+                                    let nextValue = Object.assign({}, value, {value: e.target.value, full: e.target.value * good.gprice})
                                     good['sum'] = nextValue
                                 }}
                             />
@@ -68,6 +77,11 @@ export const Goods = () => {
             {   loading ? <h3 className="text-center mt-3">Loading...</h3> :
                 renderGoods()
             }
+            <div className="Bucket">
+                <span>Итоговая сумма: {counterSum}</span>
+                <span>количество: {products.length}</span>
+                <button className="btn btn-success" onClick={() => sendData(products)}>В корзину</button>
+            </div>
         </div>
     )
 }
