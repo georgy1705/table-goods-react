@@ -1,0 +1,21 @@
+.Drawer {
+    display: flex;
+    width: 25%;
+    background: #A9A9A9;
+}
+
+.Drawer ul {
+    list-style: none;
+}
+
+.Drawer ul li {
+    color: #fff;
+    margin-top: 15px;
+    font-size: 20px;
+    padding: 0 20px 10px 20px;
+    transition: opacity .3s;
+}
+
+.Drawer ul li a:hover, .active {
+    opacity: .5;
+}
